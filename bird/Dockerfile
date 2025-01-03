@@ -1,9 +1,9 @@
 FROM ubuntu:24.04 AS builder
 
-ARG BIRD_VERION=2.15.1
+ARG BIRD_VERSION=2.15.1
 ARG BIRD_PROTOCOLS=bmp,bgp,rpki,static
 
-RUN apt update -y  &&  \ 
+RUN apt update -y  &&  \
     apt install -y --no-install-recommends --no-install-suggests \
         bison \
         ca-certificates \
@@ -17,10 +17,10 @@ RUN apt update -y  &&  \
         make \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -o /tmp/bird-${BIRD_VERION}.tar.gz https://bird.network.cz/download/bird-${BIRD_VERION}.tar.gz
-RUN tar xvzf /tmp/bird-${BIRD_VERION}.tar.gz -C /tmp
+RUN curl -o /tmp/bird-${BIRD_VERSION}.tar.gz https://bird.network.cz/download/bird-${BIRD_VERSION}.tar.gz
+RUN tar xvzf /tmp/bird-${BIRD_VERSION}.tar.gz -C /tmp
 
-RUN cd /tmp/bird-${BIRD_VERION} \
+RUN cd /tmp/bird-${BIRD_VERSION} \
     && ./configure \
         --prefix=/usr/ \
         --sysconfdir=/etc/bird/ \

@@ -2,10 +2,6 @@ name: Create and publish a Docker image
 on:
   push:
     branches: [ "main" ]
-  workflow_run:
-    workflows: [ "Rust" ]
-    types:
-      - completed
 
 env:
   REGISTRY: ghcr.io
@@ -20,6 +16,16 @@ jobs:
         include:
           - dockerfile: ./bird/Dockerfile
             image: ghcr.io/nxthdr/bird
+            tags: |
+              ghcr.io/nxthdr/bird:2.16
+            build-args: |
+              BIRD_VERSION=2.16
+          - dockerfile: ./bird/Dockerfile
+            image: ghcr.io/nxthdr/bird
+            tags: |
+              ghcr.io/nxthdr/bird:3.0.0
+            build-args: |
+              BIRD_VERSION=3.0.0
     permissions:
       contents: read
       packages: write
@@ -43,7 +49,7 @@ jobs:
         with:
           images: ${{ matrix.image }}
 
-      - name: Sync theme submodule 
+      - name: Sync theme submodule
         run: git submodule sync && git submodule update --init --recursive
 
       - name: Build and push Docker image
@@ -52,9 +58,9 @@ jobs:
         with:
           context: .
           file: ${{ matrix.dockerfile }}
+          build-args: ${{ matrix.build-args }}
+          tags: ${{ matrix.tags }}
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v2
