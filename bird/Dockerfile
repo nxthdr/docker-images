@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 AS builder
+FROM ubuntu:26.04 AS builder
 
 ARG BIRD_VERSION=2.15.1
 ARG BIRD_PROTOCOLS=bmp,bgp,rpki,static
@@ -30,7 +30,7 @@ RUN cd /tmp/bird-${BIRD_VERSION} \
     && make && make install \
     && { find /usr/sbin/bird* -type f -executable -exec strip --strip-all "{}" +; }
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 RUN set -eux \
     && apt-get update -y \
