@@ -50,11 +50,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Checkout BIRD repository
         if: ${{ matrix.needs_bird_repo }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: matthieugouel/bird
           ref: bmp-adj-rib-out
