@@ -5,6 +5,7 @@ ARG BIRD_PROTOCOLS=bmp,bgp,rpki,static
 
 RUN apt update -y  &&  \
     apt install -y --no-install-recommends --no-install-suggests \
+        autoconf \
         bison \
         ca-certificates \
         curl \
@@ -17,10 +18,14 @@ RUN apt update -y  &&  \
         make \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -o /tmp/bird-${BIRD_VERSION}.tar.gz https://bird.network.cz/download/bird-${BIRD_VERSION}.tar.gz
-RUN tar xvzf /tmp/bird-${BIRD_VERSION}.tar.gz -C /tmp
+# Sources come from the upstream GitLab archive: https://bird.network.cz/download/
+# returns HTTP 403. A git archive has no ./configure, hence `autoreconf -i`.
+RUN curl -fsSL -o /tmp/bird-${BIRD_VERSION}.tar.gz \
+        https://gitlab.nic.cz/labs/bird/-/archive/v${BIRD_VERSION}/bird-v${BIRD_VERSION}.tar.gz
+RUN tar xzf /tmp/bird-${BIRD_VERSION}.tar.gz -C /tmp
 
-RUN cd /tmp/bird-${BIRD_VERSION} \
+RUN cd /tmp/bird-v${BIRD_VERSION} \
+    && autoreconf -i \
     && ./configure \
         --prefix=/usr/ \
         --sysconfdir=/etc/bird/ \

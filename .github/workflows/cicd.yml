@@ -34,6 +34,13 @@ jobs:
               ghcr.io/nxthdr/bird:3.1.0
             build-args: |
               BIRD_VERSION=3.1.0
+          - dockerfile: ./bird/Dockerfile
+            image: ghcr.io/nxthdr/bird
+            os: ubuntu-24.04
+            tags: |
+              ghcr.io/nxthdr/bird:3.3.3
+            build-args: |
+              BIRD_VERSION=3.3.3
           - dockerfile: ./bird/Dockerfile.adj-rib-out
             image: ghcr.io/nxthdr/bird
             os: ubuntu-24.04
